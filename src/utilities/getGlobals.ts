@@ -6,7 +6,7 @@ import { unstable_cache } from 'next/cache'
 
 type Global = keyof Config['globals']
 
-async function getGlobal(slug: Global, depth = 0, locale: TypedLocale) {
+export async function getGlobal(slug: Global, depth = 0, locale: TypedLocale) {
   const payload = await getPayload({ config: configPromise })
 
   const global = await payload.findGlobal({

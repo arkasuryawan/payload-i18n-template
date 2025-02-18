@@ -5,7 +5,7 @@ import React from 'react'
 
 import type { Page, Post } from '@/payload-types'
 
-type CMSLinkType = {
+export type CMSLinkType = {
   appearance?: 'inline' | ButtonProps['variant']
   children?: React.ReactNode
   className?: string
@@ -18,6 +18,27 @@ type CMSLinkType = {
   size?: ButtonProps['size'] | null
   type?: 'custom' | 'reference' | null
   url?: string | null
+  subItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null
+          newTab?: boolean | null
+          reference?:
+            | ({
+                relationTo: 'pages'
+                value: string | Page
+              } | null)
+            | ({
+                relationTo: 'posts'
+                value: string | Post
+              } | null)
+          url?: string | null
+          label: string
+        }
+        id?: string | null
+      }[]
+    | null
+    | undefined
 }
 
 export const CMSLink: React.FC<CMSLinkType> = (props) => {

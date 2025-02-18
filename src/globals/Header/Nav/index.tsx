@@ -2,24 +2,55 @@
 
 import React from 'react'
 
-import type { Header as HeaderType } from '@/payload-types'
+import type { Header as HeaderType, Page, Post } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
-import Link from 'next/link'
-import { SearchIcon } from 'lucide-react'
+import { Dropdown } from '@/components/Dropdown'
+
+interface HeaderNavProps extends HeaderType {
+  subItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null
+          newTab?: boolean | null
+          reference?:
+            | ({
+                relationTo: 'pages'
+                value: string | Page
+              } | null)
+            | ({
+                relationTo: 'posts'
+                value: string | Post
+              } | null)
+          url?: string | null
+          label: string
+        }
+        id?: string | null
+      }[]
+    | null
+}
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems || []
 
   return (
-    <nav className="flex gap-3 items-center">
-      {navItems.map(({ link }, i) => {
-        return <CMSLink key={i} {...link} appearance="link" />
+    // <pre>{JSON.stringify(navItems, null, 2)}</pre>
+    <nav className="flex gap-3 items-center px-4 ">
+      {navItems.map(({ link, subItems }, i) => {
+        // return <pre key={i}>{JSON.stringify(subItems, null, 2)}</pre>
+        return subItems && subItems.length > 0 ? (
+          <Dropdown
+            key={i}
+            {...link}
+            subItems={subItems}
+            // subItems={subItems ?? []}
+            appearance="link"
+            className="px-2 items-center flex gap-1"
+          />
+        ) : (
+          <CMSLink key={i} {...link} appearance="link" className="px-2 items-center flex gap-1" />
+        )
       })}
-      <Link href="/search">
-        <span className="sr-only">Search</span>
-        <SearchIcon className="w-5 text-primary" />
-      </Link>
     </nav>
   )
 }

@@ -17,6 +17,8 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import localization from './i18n/localization'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import nodemailer from 'nodemailer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -58,6 +60,19 @@ export default buildConfig({
       ],
     },
   },
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_DEFAULT_ADDRESS || 'info@nusadigital.com',
+    defaultFromName: process.env.SMTP_DEFAULT_NAME || 'Nusa Digital',
+    // Nodemailer transportOptions
+    transport: nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    }),
+  }),
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: mongooseAdapter({

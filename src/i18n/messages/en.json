@@ -1,4 +1,9 @@
 {
+  "LocaleSwitcher": {
+    "id": "Bahasa",
+    "en": "English",
+    "label": "Language"
+  },
   "date-published": "Date Published",
   "author": "Author",
   "page-not-found": "This page could not be found.",
