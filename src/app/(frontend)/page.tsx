@@ -1,5 +1,6 @@
-import PageTemplate, { generateMetadata } from './[slug]/page'
+import { redirect } from 'next/navigation'
 
-export default PageTemplate
-
-export { generateMetadata }
+// This page only renders when the app is built statically (output: 'export')
+export default function RootPage() {
+  redirect('/en')
+}
