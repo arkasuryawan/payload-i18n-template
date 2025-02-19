@@ -1,10 +1,11 @@
 'use client'
 
-import { Locale } from '@/i18n/routing'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+// import { Locale } from '@/i18n/routing'
+import { useParams } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { Flag } from './icons'
 import { Localei18N } from '@/libs'
+import { useRouter, usePathname } from '@/i18n/routing'
 
 type Props = {
   defaultValue: string
@@ -15,13 +16,18 @@ type Props = {
 export default function LocaleSwitcherSelect({ defaultValue, items, label }: Props) {
   const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
-  // const pathname = usePathname()
+  const pathname = usePathname()
   const params = useParams()
   const router = useRouter()
 
   function onChange(value: string) {
     startTransition(() => {
-      router.replace(`/${value}/${params.slug}`)
+      // if ( pathname.indexOf("/po")) {
+      // router.replace(`/${value}/${params.slug || ''}`)
+      // @ts-expect-error -- TypeScript will validate that only known `params`
+      // are used in combination with a given `pathname`. Since the two will
+      // always match for the current route, we can skip runtime checks.
+      router.replace({ pathname, params }, { locale: value })
       setOpen(false)
     })
   }

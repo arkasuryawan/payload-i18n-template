@@ -19,6 +19,7 @@ import { getServerSideURL } from './utilities/getURL'
 import localization from './i18n/localization'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import nodemailer from 'nodemailer'
+import { Services } from './collections/services'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -78,7 +79,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Categories, Posts, Media, Users, Services],
   localization,
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

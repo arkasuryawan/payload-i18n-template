@@ -47,7 +47,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     <article className="pt-16 pb-24">
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
-
+      <pre>{JSON.stringify(hero, null, 2)}</pre>
       <RenderHero {...hero} />
       <RenderBlocks blocks={layout} locale={locale} />
     </article>

@@ -6,7 +6,8 @@ import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
-export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+export const MediumImpactHero: React.FC<Page['hero']> = async ({ links, media, richText }) => {
+  // const { slug = 'home', locale = 'en' } = await paramsPromise
   return (
     <div className="">
       <div className="container mb-8">
@@ -17,6 +18,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
             {links.map(({ link }, i) => {
               return (
                 <li key={i}>
+                  {/* <pre>{JSON.stringify(link, null, 2)}</pre> */}
                   <CMSLink {...link} />
                 </li>
               )

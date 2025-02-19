@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import type { Page, Post } from '@/payload-types'
+import { useLocale } from 'next-intl'
 
 export type CMSLinkType = {
   appearance?: 'inline' | ButtonProps['variant']
@@ -18,6 +19,7 @@ export type CMSLinkType = {
   size?: ButtonProps['size'] | null
   type?: 'custom' | 'reference' | null
   url?: string | null
+  // locale: string
   subItems?:
     | {
         link: {
@@ -42,6 +44,7 @@ export type CMSLinkType = {
 }
 
 export const CMSLink: React.FC<CMSLinkType> = (props) => {
+  // const locale = useLocale()
   const {
     type,
     appearance = 'inline',
@@ -52,6 +55,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     reference,
     size: sizeFromProps,
     url,
+    // locale,
   } = props
 
   const href =

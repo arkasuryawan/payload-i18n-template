@@ -10,6 +10,7 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -26,7 +27,7 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
 
 export const plugins: Plugin[] = [
   redirectsPlugin({
-    collections: ['pages', 'posts'],
+    collections: ['pages', 'posts', 'services'],
     overrides: {
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
@@ -91,4 +92,19 @@ export const plugins: Plugin[] = [
     },
   }),
   payloadCloudPlugin(),
+  ...(process.env.ENV === 'production'
+    ? [
+        vercelBlobStorage({
+          enabled: true, // Optional, defaults to true
+          // Specify which collections should use Vercel Blob
+          collections: {
+            media: {
+              prefix: 'store_KsJzI5TGom52JVRR',
+            },
+          },
+          // Token provided by Vercel once Blob storage is added to your Vercel project
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+        }),
+      ]
+    : []),
 ]
