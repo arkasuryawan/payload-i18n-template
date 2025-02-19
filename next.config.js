@@ -26,4 +26,10 @@ const nextConfig = {
   redirects,
 }
 
+// nextConfig.i18n = {
+//   locales: ['en', 'id'],
+//   defaultLocale: 'en',
+//   localeDetection: false,
+// }
+
 export default withNextIntl(withPayload(nextConfig))

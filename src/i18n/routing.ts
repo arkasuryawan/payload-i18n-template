@@ -6,6 +6,7 @@ export const routingResult = async () => {
   return defineRouting({
     locales: localization.locales.map((locale) => locale.code),
     defaultLocale: localization.defaultLocale,
+    localeDetection: localization.localeDetection,
   })
 }
 

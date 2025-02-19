@@ -1,86 +1,92 @@
-import { Metadata } from 'next'
-// import PageTemplate from './[slug]/page'
+import PageTemplate, { generateMetadata } from './[slug]/page'
 
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
-import { generateMeta } from '@/utilities/generateMeta'
-import { TypedLocale } from 'payload'
-import { PayloadRedirects } from '@/components/PayloadRedirects'
-import { homeStatic } from '@/endpoints/seed/home-static'
-import type { Page as PageType } from '@/payload-types'
-import { RenderBlocks } from '@/blocks/RenderBlocks'
-import { RenderHero } from '@/heros/RenderHero'
-import PageClient from './[slug]/page.client'
+export default PageTemplate
 
-type Args = {
-  params: Promise<{
-    slug?: string
-    locale: TypedLocale
-  }>
-}
+export { generateMetadata }
 
-export default async function Page({ params: paramsPromise }: Args) {
-  const { slug = 'home', locale = 'en' } = await paramsPromise
-  const url = '/' + slug
+// import { Metadata } from 'next'
+// // import PageTemplate from './[slug]/page'
 
-  let page: PageType | null
+// import configPromise from '@payload-config'
+// import { getPayload } from 'payload'
+// import { draftMode } from 'next/headers'
+// import React, { cache } from 'react'
+// import { generateMeta } from '@/utilities/generateMeta'
+// import { TypedLocale } from 'payload'
+// import { PayloadRedirects } from '@/components/PayloadRedirects'
+// import { homeStatic } from '@/endpoints/seed/home-static'
+// import type { Page as PageType } from '@/payload-types'
+// import { RenderBlocks } from '@/blocks/RenderBlocks'
+// import { RenderHero } from '@/heros/RenderHero'
+// import PageClient from './[slug]/page.client'
 
-  page = await queryPage({
-    slug,
-    locale,
-  })
+// type Args = {
+//   params: Promise<{
+//     slug?: string
+//     locale: TypedLocale
+//   }>
+// }
 
-  // Remove this code once your website is seeded
-  // if (!page && slug === 'home') {
-  //   page = homeStatic
-  // }
+// export default async function Page({ params: paramsPromise }: Args) {
+//   const { slug = 'home', locale = 'en' } = await paramsPromise
+//   const url = '/' + slug
 
-  if (!page) {
-    return <PayloadRedirects url={url} />
-  }
+//   let page: PageType | null
 
-  const { hero, layout } = page
+//   page = await queryPage({
+//     slug,
+//     locale,
+//   })
 
-  return (
-    <article className="pt-16 pb-24">
-      <PageClient />
-      <PayloadRedirects disableNotFound url={url} />
-      <pre>{JSON.stringify(hero, null, 2)}</pre>
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} locale={locale} />
-    </article>
-  )
-}
+//   // Remove this code once your website is seeded
+//   // if (!page && slug === 'home') {
+//   //   page = homeStatic
+//   // }
 
-export async function generateMetadata({ params }: Args): Promise<Metadata> {
-  const { locale = 'en', slug = 'home' } = await params
-  const page = await queryPage({
-    locale,
-    slug,
-  })
+//   if (!page) {
+//     return <PayloadRedirects url={url} />
+//   }
 
-  return generateMeta({ doc: page })
-}
+//   const { hero, layout } = page
 
-const queryPage = cache(async ({ locale, slug }: { locale: TypedLocale; slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
+//   return (
+//     <article className="pt-16 pb-24">
+//       <PageClient />
+//       <PayloadRedirects disableNotFound url={url} />
+//       {/* <pre>{JSON.stringify(hero, null, 2)}</pre> */}
+//       <RenderHero {...hero} />
+//       <RenderBlocks blocks={layout} locale={locale} />
+//     </article>
+//   )
+// }
 
-  const payload = await getPayload({ config: configPromise })
+// export async function generateMetadata({ params }: Args): Promise<Metadata> {
+//   const { locale = 'en', slug = 'home' } = await params
+//   const page = await queryPage({
+//     locale,
+//     slug,
+//   })
 
-  const result = await payload.find({
-    collection: 'pages',
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    locale: locale,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
+//   return generateMeta({ doc: page })
+// }
 
-  return result.docs?.[0] || null
-})
+// const queryPage = cache(async ({ locale, slug }: { locale: TypedLocale; slug: string }) => {
+//   const { isEnabled: draft } = await draftMode()
+
+//   const payload = await getPayload({ config: configPromise })
+
+//   const result = await payload.find({
+//     collection: 'pages',
+//     draft,
+//     limit: 1,
+//     overrideAccess: draft,
+//     locale: locale,
+//     where: {
+//       slug: {
+//         equals: slug,
+//       },
+//     },
+//   })
+
+//   return result.docs?.[0] || null
+// })
